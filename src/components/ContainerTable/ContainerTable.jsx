@@ -1,33 +1,70 @@
 import React, { useState } from "react";
 import {
-  Checkbox,
   Flex,
   Input,
+  useToast,
+  Progress,
   Text,
   Button,
-  CheckboxGroup,
+  Checkbox,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
-import { Buttons } from "../Buttons/Buttons";
-import { useToast } from "@chakra-ui/react";
-import { Progress } from "@chakra-ui/react";
 
 export const ContainerTable = () => {
-  const toast = useToast();
-  const dateOfItemAdded = new Date();
-  const [inputValue, setInputValue] = useState("");
-  const [tasks, setTasks] = useState([]);
-  const [isComplete, setIsComplete] = useState(false);
+  const task = [
+    {
+      id: Math.floor(1 + Math.random() * 100000),
+      title: "Estudar",
+      checked: false,
+      date: new Date(),
+    },
+    {
+      id: Math.floor(1 + Math.random() * 100000),
+      title: "Jogar",
+      checked: false,
+      date: new Date(),
+    },
+    {
+      id: Math.floor(1 + Math.random() * 100000),
+      title: "Comprar",
+      checked: false,
+      date: new Date(),
+    },
+    {
+      id: Math.floor(1 + Math.random() * 100000),
+      title: "Amanhã",
+      checked: false,
+      date: new Date(),
+    },
+    {
+      id: Math.floor(1 + Math.random() * 100000),
+      title: "Pegar",
+      checked: false,
+      date: new Date(),
+    },
+  ];
 
-  const idRandom = (num) => {
-    return Math.floor(Math.random() * num);
-  };
+  const toast = useToast();
+  const [inputValue, setInputValue] = useState("");
+  const [tasks, setTasks] = useState(task);
+  const [tasksCompleted, setTasksCompleted] = useState(0);
 
   const newTask = {
-    id: idRandom(1000000),
+    id: Math.floor(1 + Math.random() * 100000),
     title: inputValue,
-    checked: isComplete,
+    checked: false,
     date: new Date(),
+  };
+
+  const handleCheck = (e) => {
+    const newTasks = tasks.map((item) => {
+      if (item.id === Number(e.target.id)) {
+        item.checked = !item.checked;
+      }
+      return item;
+    });
+    setTasks(newTasks);
+    setTasksCompleted(tasks.filter((item) => item.checked).length);
   };
 
   const handleAddTask = () => {
@@ -43,9 +80,6 @@ export const ContainerTable = () => {
           });
     }
     setInputValue("");
-    if (tasks) {
-      console.log(tasks[0]);
-    }
   };
 
   return (
@@ -59,22 +93,7 @@ export const ContainerTable = () => {
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Adicionar item"
         />
-        <Button
-          variant="ghost"
-          onClick={() => handleAddTask()}
-          // {
-          //   inputValue
-          //     ? setTasks([...tasks, newTask])
-          //     : toast({
-          //         title: "No tasks to add.",
-          //         description: "Try to add a task inside the list.",
-          //         status: "error",
-          //         duration: 9000,
-          //         isClosable: true,
-          //       });
-          // }
-          // }}
-        >
+        <Button variant="ghost" onClick={() => handleAddTask()}>
           <AddIcon w="20px" h="20px" />
         </Button>
       </Flex>
@@ -82,7 +101,7 @@ export const ContainerTable = () => {
         {tasks.map((item, index) => (
           <Flex
             w="100%"
-            bgColor="transparent"
+            bgColor="#222"
             color="#fff"
             m="5px"
             p="8px"
@@ -90,23 +109,39 @@ export const ContainerTable = () => {
             borderRadius="10px"
             key={index}
           >
-            {/* <Checkbox onChange={() => setIsComplete(!isComplete)} size="md" /> */}
-            <Checkbox onChange={() => setIsComplete(!isComplete)} />
+            <Checkbox
+              name={item.title}
+              checked={item.checked}
+              id={item.id}
+              type="checkbox"
+              size="md"
+              onChange={handleCheck}
+            />
             <Text
-              textDecor={isComplete ? "line-through" : "none"}
-              fontWeight="400"
+              textDecor={item.checked ? "line-through" : "none"}
+              fontWeight="700"
             >
               {item.title}
             </Text>
           </Flex>
         ))}
-        <Progress
-          mt="10px"
-          colorScheme="blackAlpha"
-          size="xs"
-          max={tasks.length}
-          value={0}
-        />
+        <Flex flexDir="column" textAlign="center" w="100%">
+          <Text color="#333" fontWeight="bold" mt="10px">
+            Progresso:{" "}
+          </Text>
+          <Progress
+            mt="10px"
+            colorScheme={tasksCompleted === tasks.length ? "green" : "red"}
+            size="md"
+            max={tasks.length}
+            value={tasksCompleted}
+          />
+          {tasksCompleted === tasks.length && (
+            <Text mt="10px" fontWeight="bold" color="#333">
+              Parabéns, você concluiu todas as tarefas do dia!
+            </Text>
+          )}
+        </Flex>
       </Flex>
     </Flex>
   );

@@ -28,8 +28,23 @@ export function AppProvider({ children }) {
             duration: 9000,
             isClosable: true,
           });
+
+      localStorage.setItem("tasksInLocalStorage", JSON.stringify(tasks));
+
+      setInputValue("");
     }
-    setInputValue("");
+  };
+
+  useEffect(() => {
+    const tasksInLocalStorage = localStorage.getItem("tasksInLocalStorage");
+    if (tasksInLocalStorage) {
+      setTasks(JSON.parse(tasksInLocalStorage));
+    }
+  }, []);
+
+  const deleteTask = (id) => {
+    const newTasks = tasks.filter((item) => item.id !== id);
+    setTasks(newTasks);
   };
 
   const newTask = {
@@ -40,7 +55,8 @@ export function AppProvider({ children }) {
   };
 
   const onchange = (e) => {
-    localStorage.setItem("inputValue", e.target.value);
+    // salvar no local storage
+    localStorage.setItem("inputValueInLocalStorage", e.target.value);
     setInputValue(e.target.value);
   };
 
@@ -53,7 +69,6 @@ export function AppProvider({ children }) {
     });
     setTasks(newTasks);
     setTasksCompleted(tasks.filter((item) => item.checked).length);
-    console.log(newTask.date);
   };
 
   const value = {
@@ -68,6 +83,7 @@ export function AppProvider({ children }) {
     newTask,
     onchange,
     handleCheck,
+    deleteTask,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useApp } from "../../contexts/ContextApi";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 export const ContainerTable = () => {
   const {
@@ -23,6 +24,7 @@ export const ContainerTable = () => {
     onchange,
     handleAddTask,
     tasksCompleted,
+    deleteTask,
   } = useApp();
   const Toast = useToast();
 
@@ -52,25 +54,35 @@ export const ContainerTable = () => {
             p="8px"
             gap="10px"
             borderRadius="10px"
+            justify="space-between"
             key={index}
           >
-            <Checkbox
-              name={item.title}
-              checked={item.checked}
-              id={item.id}
-              type="checkbox"
-              size="md"
-              onChange={handleCheck}
-            />
-            <Text
-              textDecor={item.checked ? "line-through" : "none"}
-              fontWeight="700"
-            >
-              {item.title}
-            </Text>
+            <Flex align="center" justify="space-between" w="100%" gap="10px">
+              <Flex gap="10px">
+                <Checkbox
+                  name={item.title}
+                  checked={item.checked}
+                  id={item.id}
+                  type="checkbox"
+                  size="md"
+                  onChange={handleCheck}
+                />
+                <Text
+                  textDecor={item.checked ? "line-through" : "none"}
+                  fontWeight="700"
+                >
+                  {item.title}
+                </Text>
+              </Flex>
+              <Flex>
+                <Button onClick={() => deleteTask(item.id)} variant="ghost">
+                  <DeleteIcon w="20px" h="20px" />
+                </Button>
+              </Flex>
+            </Flex>
           </Flex>
         ))}
-        <Flex position="fixed" w="30%" flexDir="column" bottom="20px">
+        <Flex w="35%" position="fixed" flexDir="column" bottom="20px">
           <Progress
             w="100%"
             align="center"

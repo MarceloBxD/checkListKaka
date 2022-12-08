@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useApp } from "../../contexts/ContextApi";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, BellIcon } from "@chakra-ui/icons";
 
 export const ContainerTable = () => {
   const {
@@ -25,8 +25,8 @@ export const ContainerTable = () => {
     handleAddTask,
     tasksCompleted,
     deleteTask,
+    deleteAll,
   } = useApp();
-  const Toast = useToast();
 
   return (
     <Flex flexDir="column" m="0 auto">
@@ -102,6 +102,15 @@ export const ContainerTable = () => {
             </Alert>
           )}
         </Flex>
+        <Button
+          onClick={() => deleteAll()}
+          isDisabled={tasks.length != 0 ? false : true}
+          position="absolute"
+          right="20px"
+          bottom="20px"
+        >
+          <BellIcon variant="unstyled" w="20px" h="20px" />
+        </Button>
       </Flex>
     </Flex>
   );

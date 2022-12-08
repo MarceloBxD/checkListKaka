@@ -35,6 +35,12 @@ export function AppProvider({ children }) {
     }
   };
 
+  const deleteAll = () => {
+    // deletar tudo do local storage
+    localStorage.clear();
+    setTasks([]);
+  };
+
   useEffect(() => {
     const tasksInLocalStorage = localStorage.getItem("tasksInLocalStorage");
     if (tasksInLocalStorage) {
@@ -84,6 +90,7 @@ export function AppProvider({ children }) {
     onchange,
     handleCheck,
     deleteTask,
+    deleteAll,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

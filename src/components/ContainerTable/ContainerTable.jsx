@@ -6,11 +6,11 @@ import {
   Text,
   Button,
   Checkbox,
-  Toast,
   Alert,
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  useToast,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useApp } from "../../contexts/ContextApi";
@@ -24,6 +24,7 @@ export const ContainerTable = () => {
     handleAddTask,
     tasksCompleted,
   } = useApp();
+  const Toast = useToast();
 
   return (
     <Flex flexDir="column" m="0 auto">
@@ -77,12 +78,15 @@ export const ContainerTable = () => {
             size="md"
             max={tasks.length}
             value={tasksCompleted}
-            visibility={tasksCompleted === tasks.length ? "hidden" : "visible"}
+            visibility={tasks.length === 0 ? "hidden" : "visible"}
           />
-          {tasksCompleted === tasks.length && (
-            <Alert status="success">
+          {tasksCompleted === tasks.length && tasks.length != 0 && (
+            <Alert status="success" mt="10px">
               <AlertIcon />
-              Tarefas concluídas com sucesso! Parabéns!
+              <AlertTitle mr={2}>Parabéns!</AlertTitle>
+              <AlertDescription>
+                Você concluiu todas as tarefas!
+              </AlertDescription>
             </Alert>
           )}
         </Flex>

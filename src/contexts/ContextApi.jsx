@@ -10,14 +10,7 @@ import { useToast } from "@chakra-ui/react";
 const AppContext = createContext();
 
 export function AppProvider({ children }) {
-  const task = [
-    {
-      id: Math.floor(1 + Math.random() * 100000),
-      title: "Programar por 3 horas",
-      checked: false,
-      date: new Date(),
-    },
-  ];
+  const task = [];
 
   const [inputValue, setInputValue] = useState("");
   const [tasks, setTasks] = useState(task);

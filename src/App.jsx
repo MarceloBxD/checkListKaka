@@ -1,10 +1,21 @@
 import "./App.css";
 import { Header } from "./components/Header/Header";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Spinner } from "@chakra-ui/react";
 import { ContainerTable } from "./components/ContainerTable/ContainerTable";
 import backgroundImg from "./assets/images/background.jpg";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [loading, setLoading] = useState(undefined);
+
+  useEffect(() => {
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
+
   return (
     <Flex
       w="100vw"
@@ -17,8 +28,16 @@ function App() {
         backgroundSize: "cover",
       }}
     >
-      <Header />
-      <ContainerTable />
+      {loading ? (
+        <Flex w="100vw" h="100vh" justify="center" align="center">
+          <Spinner color="white" size="xl" />
+        </Flex>
+      ) : (
+        <>
+          <Header />
+          <ContainerTable />
+        </>
+      )}
     </Flex>
   );
 }

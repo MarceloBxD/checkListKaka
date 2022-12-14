@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Flex,
   Input,
@@ -10,11 +10,10 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  useToast,
+  Tooltip,
 } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
 import { useApp } from "../../contexts/ContextApi";
-import { DeleteIcon, BellIcon } from "@chakra-ui/icons";
+import { DeleteIcon, AddIcon } from "@chakra-ui/icons";
 
 export const ContainerTable = () => {
   const {
@@ -35,6 +34,7 @@ export const ContainerTable = () => {
           color="#FFF"
           variant="flushed"
           w="400px"
+          onKeyDown={(e) => (e.KeyCode == "13" ? handleAddTask() : null)}
           value={inputValue}
           onChange={onchange}
           placeholder="Adicionar item"
@@ -60,7 +60,7 @@ export const ContainerTable = () => {
             <Flex align="center" justify="space-between" w="100%" gap="10px">
               <Flex gap="10px">
                 <Checkbox
-                  name={item.title}
+                  name={item.label}
                   checked={item.checked}
                   id={item.id}
                   type="checkbox"
@@ -71,7 +71,7 @@ export const ContainerTable = () => {
                   textDecor={item.checked ? "line-through" : "none"}
                   fontWeight="700"
                 >
-                  {item.title}
+                  {item.label}
                 </Text>
               </Flex>
               <Flex>
@@ -105,11 +105,13 @@ export const ContainerTable = () => {
         <Button
           onClick={() => deleteAll()}
           isDisabled={tasks.length != 0 ? false : true}
-          position="absolute"
+          position="fixed"
           right="20px"
           bottom="20px"
         >
-          <BellIcon variant="unstyled" w="20px" h="20px" />
+          <Tooltip label="Delete All" mb="10px" size="sm">
+            <DeleteIcon variant="unstyled" w="20px" h="20px" />
+          </Tooltip>
         </Button>
       </Flex>
     </Flex>

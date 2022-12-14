@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Flex, Avatar, Text } from "@chakra-ui/react";
 import avatarImg from "../../assets/images/avatar.jpeg";
-import { Spinner } from "@chakra-ui/react";
 
 export const Header = () => {
   return (
@@ -16,7 +15,7 @@ export const Header = () => {
         CheckList
       </Text>
       <Flex>
-        {avatarImg ? <Avatar src={avatarImg} size="md" /> : <Spinner />}
+        <Avatar src={avatarImg} size="md" />
       </Flex>
     </Flex>
   );

@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useRef,
-} from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useToast } from "@chakra-ui/react";
 
 const AppContext = createContext();
@@ -12,10 +6,19 @@ const AppContext = createContext();
 export function AppProvider({ children }) {
   const task = [];
 
+  const toast = useToast();
   const [inputValue, setInputValue] = useState("");
   const [tasks, setTasks] = useState(task);
   const [tasksCompleted, setTasksCompleted] = useState(0);
-  const toast = useToast();
+  const [tasksChecked, setTasksChecked] = useState(
+    // ao reiniciar a pagina, as tasks permanecem
+    JSON.parse(localStorage.getItem("tasksChecked")) || []
+  );
+  const newTask = {
+    id: Math.floor(Math.random() * 1000),
+    label: inputValue,
+    checked: false,
+  };
 
   const handleAddTask = () => {
     {
@@ -28,20 +31,18 @@ export function AppProvider({ children }) {
             duration: 9000,
             isClosable: true,
           });
-
-      localStorage.setItem("tasksInLocalStorage", JSON.stringify(tasks));
-
+      console.log(tasks);
       setInputValue("");
     }
   };
 
   const deleteAll = () => {
-    // deletar tudo do local storage
     localStorage.clear();
     setTasks([]);
   };
 
   useEffect(() => {
+    // ao reiniciar a pagina, as tasks permanecem
     const tasksInLocalStorage = localStorage.getItem("tasksInLocalStorage");
     if (tasksInLocalStorage) {
       setTasks(JSON.parse(tasksInLocalStorage));
@@ -53,17 +54,12 @@ export function AppProvider({ children }) {
     setTasks(newTasks);
   };
 
-  const newTask = {
-    id: Math.floor(1 + Math.random() * 100000),
-    title: inputValue,
-    checked: false,
-    date: new Date(),
-  };
-
   const onchange = (e) => {
     // salvar no local storage
     localStorage.setItem("inputValueInLocalStorage", e.target.value);
     setInputValue(e.target.value);
+
+    localStorage.setItem("tasksInLocalStorage", JSON.stringify(tasks));
   };
 
   const handleCheck = (e) => {
